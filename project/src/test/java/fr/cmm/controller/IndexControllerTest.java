@@ -58,6 +58,16 @@ public class IndexControllerTest {
     }
 
     @Test
+    public void recette404NotFound() throws Exception {
+        String id = "46546";
+
+        Mockito.when(recipeService.findById(id)).thenReturn(null);
+
+        mockMvc.perform(get("/recette/" + id))
+                .andExpect(status().is(404));
+    }
+
+    @Test
     public void contact() throws Exception {
         mockMvc.perform(get("/contact"))
                 .andExpect(view().name("contact"));
@@ -70,10 +80,5 @@ public class IndexControllerTest {
                 .andExpect(model().attribute("indexGood",1));
     }
 
-    @Test
-    public void page404NotFound() throws Exception {
-        String id = "46546";
-        mockMvc.perform(get("/recette/" + id))
-                .andExpect(status().is(404));
-    }
+
 }
