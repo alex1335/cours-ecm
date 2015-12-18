@@ -5,19 +5,23 @@ import javax.inject.Inject;
 import fr.cmm.controller.form.SearchForm;
 import fr.cmm.helper.PageQuery;
 import fr.cmm.helper.Pagination;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import fr.cmm.helper.Columns;
 import fr.cmm.service.RecipeService;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-@Controller
+
+@ControllerAdvice
 public class IndexController {
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(Exception.class)
+    public void handleNoTFound() {}
+
     @Inject
     private RecipeService recipeService;
 
@@ -94,5 +98,6 @@ public class IndexController {
     public String mentionsLegales() {
         return "mentions-legales";
     }
+
 }
 
