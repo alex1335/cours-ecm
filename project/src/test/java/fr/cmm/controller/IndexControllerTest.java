@@ -69,6 +69,4 @@ public class IndexControllerTest {
                 .andExpect(view().name("recettes"))
                 .andExpect(model().attribute("indexGood",1));
     }
-
-    
 }
