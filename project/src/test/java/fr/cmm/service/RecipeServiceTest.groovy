@@ -35,13 +35,10 @@ public class RecipeServiceTest {
     }
 
     @Test
-    public void save() {
-        Recipe recipe = new Recipe();
-        recipe.setTitle("test recipe");
+    void save() {
+        recipeService.save(new Recipe(title: 'test recipe'))
 
-        recipeService.save(recipe);
-
-        assertEquals("test recipe", recipeCollection.findOne().as(Recipe.class).getTitle());
+        assert recipeCollection.findOne().as(Recipe).title == 'test recipe'
     }
 
     @Test
@@ -62,11 +59,11 @@ public class RecipeServiceTest {
         recipeService.save(new Recipe());
         recipeService.save(new Recipe());
 
-        assertEquals(5, stream(recipeService.findByQuery(new PageQuery()).spliterator(), false).count());
+        assert recipeService.findByQuery(new PageQuery()).size() == 5
     }
 
     @Test
-    public void findByQueryWithCustomPageSize() {
+    public void 'findByQuery -> with custom PageSize'() {
         recipeService.save(new Recipe());
         recipeService.save(new Recipe());
         recipeService.save(new Recipe());
@@ -81,11 +78,7 @@ public class RecipeServiceTest {
 
     @Test
     public void findByQueryWithTag() {
-        recipeService.save(new Recipe().withTags("tag1"));
-        recipeService.save(new Recipe().withTags("tag1"));
-        recipeService.save(new Recipe().withTags("tag2"));
-        recipeService.save(new Recipe().withTags("tag2"));
-        recipeService.save(new Recipe().withTags("tag3"));
+        5.times {recipeService.save(new Recipe().withTags("tag1"))};
 
         PageQuery pageQuery = new PageQuery();
         pageQuery.setTag("tag1");
@@ -95,7 +88,7 @@ public class RecipeServiceTest {
 
     @Test
     public void findAllTags() {
-        recipeService.save(new Recipe().withTags("tag1", "tag2"));
+        recipeService.save(new Recipe(tags: ['tag1', 'tag2']));
         recipeService.save(new Recipe().withTags("tag2", "tag3"));
 
         assertEquals(asList("tag1", "tag2", "tag3"), recipeService.findAllTags());
