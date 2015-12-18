@@ -69,4 +69,11 @@ public class IndexControllerTest {
                 .andExpect(view().name("recettes"))
                 .andExpect(model().attribute("indexGood",1));
     }
+
+    @Test
+    public void page404NotFound() throws Exception {
+        String id = "46546";
+        mockMvc.perform(get("/recette/" + id))
+                .andExpect(status().is(404));
+    }
 }
