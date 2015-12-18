@@ -2,7 +2,9 @@ package fr.cmm.service;
 
 import fr.cmm.domain.Recipe;
 import fr.cmm.helper.PageQuery;
+import org.bson.types.ObjectId;
 import org.jongo.MongoCollection;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,6 +22,7 @@ import java.util.stream.StreamSupport;
 import static fr.cmm.SpringProfiles.INTEG;
 import static java.util.Arrays.asList;
 import static java.util.stream.StreamSupport.stream;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ImageServiceTestConfig.class)
@@ -44,7 +47,7 @@ public class RecipeServiceTest {
 
         recipeService.save(recipe);
 
-        Assert.assertEquals("test recipe", recipeCollection.findOne().as(Recipe.class).getTitle());
+        assertEquals("test recipe", recipeCollection.findOne().as(Recipe.class).getTitle());
     }
 
     @Test
@@ -54,7 +57,7 @@ public class RecipeServiceTest {
 
         recipeService.save(recipe);
 
-        Assert.assertEquals("test recipe", recipeService.findById(recipe.getId()).getTitle());
+        assertEquals("test recipe", recipeService.findById(recipe.getId()).getTitle());
     }
 
     @Test
@@ -65,7 +68,7 @@ public class RecipeServiceTest {
         recipeService.save(new Recipe());
         recipeService.save(new Recipe());
 
-        Assert.assertEquals(5, stream(recipeService.findByQuery(new PageQuery()).spliterator(), false).count());
+        assertEquals(5, stream(recipeService.findByQuery(new PageQuery()).spliterator(), false).count());
     }
 
     @Test
@@ -79,7 +82,7 @@ public class RecipeServiceTest {
         PageQuery pageQuery = new PageQuery();
         pageQuery.setSize(2);
 
-        Assert.assertEquals(2, stream(recipeService.findByQuery(pageQuery).spliterator(), false).count());
+        assertEquals(2, stream(recipeService.findByQuery(pageQuery).spliterator(), false).count());
     }
 
     @Test
@@ -93,7 +96,7 @@ public class RecipeServiceTest {
         PageQuery pageQuery = new PageQuery();
         pageQuery.setTag("tag1");
 
-        Assert.assertEquals(2, stream(recipeService.findByQuery(pageQuery).spliterator(), false).count());
+        assertEquals(2, stream(recipeService.findByQuery(pageQuery).spliterator(), false).count());
     }
 
     @Test
@@ -101,6 +104,13 @@ public class RecipeServiceTest {
         recipeService.save(new Recipe().withTags("tag1", "tag2"));
         recipeService.save(new Recipe().withTags("tag2", "tag3"));
 
-        Assert.assertEquals(asList("tag1", "tag2", "tag3"), recipeService.findAllTags());
+        assertEquals(asList("tag1", "tag2", "tag3"), recipeService.findAllTags());
+    }
+
+    @Test
+    public void findByIdWithInvalidId() {
+        String id = "bad";
+        Recipe recette = recipeService.findById(id);
+        assertEquals(null, recette);
     }
 }
