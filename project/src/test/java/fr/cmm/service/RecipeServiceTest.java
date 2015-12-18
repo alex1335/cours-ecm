@@ -2,11 +2,8 @@ package fr.cmm.service;
 
 import fr.cmm.domain.Recipe;
 import fr.cmm.helper.PageQuery;
-import org.bson.types.ObjectId;
 import org.jongo.MongoCollection;
-
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,9 +12,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
-
-import java.util.Arrays;
-import java.util.stream.StreamSupport;
 
 import static fr.cmm.SpringProfiles.INTEG;
 import static java.util.Arrays.asList;
@@ -112,5 +106,15 @@ public class RecipeServiceTest {
         String id = "bad";
         Recipe recette = recipeService.findById(id);
         assertEquals(null, recette);
+    }
+
+    @Test
+    public void countByQueryUseQuery() {
+        PageQuery query = new PageQuery();
+        recipeService.save(new Recipe());
+        recipeService.save(new Recipe());
+        recipeService.save(new Recipe());
+        long nombreRecettes = recipeService.countByQuery(query);
+        assertEquals(3, nombreRecettes);
     }
 }
