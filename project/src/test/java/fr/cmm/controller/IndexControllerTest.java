@@ -56,4 +56,17 @@ public class IndexControllerTest {
                 .andExpect(model().attributeExists("recipe"))
                 .andExpect(view().name("recette"));
     }
+
+    @Test
+    public void contact() throws Exception {
+        mockMvc.perform(get("/contact"))
+                .andExpect(view().name("contact"));
+    }
+
+    @Test
+    public void pageIndex() throws Exception {
+        mockMvc.perform(get("/recettes?pageIndex=-4"))
+                .andExpect(view().name("recettes"))
+                .andExpect(model().attributeExists("recipe"));
+    }
 }
