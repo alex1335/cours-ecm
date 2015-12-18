@@ -20,11 +20,11 @@ public class IndexController {
     @Inject
     private RecipeService recipeService;
 
-    @RequestMapping({"/index", "/"})
+    @RequestMapping(["/index", "/"])
     public String index(ModelMap model) {
-        model.put("columns", randomColumns());
+        model.columns = randomColumns()
 
-        return "index";
+        "index";
     }
 
     @RequestMapping("/tags.json")
@@ -80,7 +80,7 @@ public class IndexController {
     @RequestMapping("/recette/{id}")
     public String recette(@PathVariable("id") String id, ModelMap model) {
         Recipe recipe = recipeService.findById(id);
-        if (recipe == null) {
+        if (!recipe) {
             throw new ResourceNotFoundException();
         }else {
             model.put("recipe", recipe);
