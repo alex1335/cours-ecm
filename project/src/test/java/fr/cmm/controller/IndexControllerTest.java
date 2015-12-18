@@ -67,6 +67,8 @@ public class IndexControllerTest {
     public void pageIndex() throws Exception {
         mockMvc.perform(get("/recettes?pageIndex=-4"))
                 .andExpect(view().name("recettes"))
-                .andExpect(model().attributeExists("recipe"));
+                .andExpect(model().attribute("indexGood",1));
     }
+
+    
 }
